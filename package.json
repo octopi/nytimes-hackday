@@ -5,6 +5,7 @@
     "instagram-node": "~0.1.13",
     "express": "~3.4.0",
     "async": "~0.2.9",
-    "request": "~2.27.0"
+    "request": "~2.27.0",
+    "underscore": "~1.5.2"
   }
 }
