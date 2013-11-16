@@ -2,3 +2,9 @@
   width: 450px;
   margin: 0 auto;
 }
+
+.is-img {
+  width: 446px;
+  border-radius: 5px;
+  margin-top: 45px;
+}

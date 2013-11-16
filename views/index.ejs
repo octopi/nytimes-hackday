@@ -15,13 +15,14 @@
     var socket = io.connect('http://localhost:5000');
     socket.on('newTweetSent', function(data) {
       $('#stream').prepend(data.html);
+      $('#stream').prepend('<img class="is-img" src="' + data.imageurl + '" />');
     });
     $(function() {
       $('#startStream').click(function() {
-	socket.emit('restartStream', {});
+      	socket.emit('restartStream', {});
       });
       $('#stopStream').click(function() {
-	socket.emit('stopStream', {});
+      	socket.emit('stopStream', {});
       });
     });
   </script>
