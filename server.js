@@ -78,7 +78,7 @@ var pullFromTwitter = function(socket) {
                           if(inst.type === 'photo') {
                             socket.emit('newTweetSent', {
                               html: JSON.parse(body).html,
-                              imageurl: inst.url
+                              instagram: inst
                             });
                           }
                         });
@@ -104,7 +104,7 @@ var pullFromTwitter = function(socket) {
 	   			for(var j = 0; j < keywords.length; j++) {
 	   				if(keywords[j].length > 3){
 	   					var currKeyword = keywords[j]+" ";
-		   				if(str.toLowerCase().indexOf(currKeyword.toLowerCase()) !== -1){
+		   				if(str.toLowerCase().indexOf('#' + currKeyword.toLowerCase()) !== -1){
 		       				var response = "Check out this trending nytimes article on " + currentKey + " #educateyoself";
 		       				response = response + " " + facets[currentKey];
 		           			return response;
