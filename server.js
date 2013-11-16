@@ -6,8 +6,15 @@ var app = express();
 app.use(express.logger());
 app.use(express.bodyParser());
 
+var getNYTimesTrending = function() {};
+var pullFromTwitter = function() {
+  console.log('yo');
+};
+var makeComment = function(instagramUrl) {};
+
+pullFromTwitter();
+
 app.get('/', function(req, res) {
-  res.send('whaddup');
 });
 
 
