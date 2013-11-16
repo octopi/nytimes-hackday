@@ -43,7 +43,7 @@ var getNYTimesTrending = function(callback) {
 
   var addToFacets = function(url) {
     return function(facet) {
-      facets[facet.replace(' ', '')] = url;
+      facets[facet.replace(' ', '', 'g')] = url;
     };
   };
 };
@@ -64,20 +64,22 @@ var pullFromTwitter = function(socket) {
 					if(tweet.entities.urls[x].expanded_url.indexOf("instagram.com") !== -1) {
 						var response = checkFacets(tweet.text, Object.keys(facets));
 						if(response.length > 0) {
-							response = "@" + tweet.user.screen_name + " " + response;
 							console.log("RESPONSE ID : " + tweet.id);
 							console.log("TWEETING RESPONSE: " + response);
-							T.post('statuses/update', { status: response, in_reply_to_status_id: tweet.id_str}, function(err, reply) {
-								console.log(err, reply);
-			                // send tweet to frontend
-				                request('https://api.twitter.com/1/statuses/oembed.json?id=' + tweet.id_str, function(err, response, body) {
-				               		request('http://api.instagram.com/oembed?url=' + tweet.entities.urls[x].expanded_url, function(inst_err, inst_response, inst_body) {
-				                  		socket.emit('newTweetSent', {
-				                    	html: JSON.parse(body).html
-				                    	imageurl: JSON.parse(inst_body).url
-				                  	});
-				                });
-
+							T.post('statuses/update', { status: response }, function(err, reply) {
+                if(!err) {
+                  // send tweet to frontend
+  	                request('https://api.twitter.com/1/statuses/oembed.json?id=' + reply.id_str, function(err, response, body) {
+  	               		request('http://api.instagram.com/oembed?url=' + tweet.entities.urls[x].expanded_url, function(inst_err, inst_response, inst_body) {
+  	                  		socket.emit('newTweetSent', {
+  	                    	html: JSON.parse(body).html,
+  	                    	imageurl: JSON.parse(inst_body).url
+  	                  	});
+  	                });
+                  } else {
+                    console.log(er);
+                  }
+                });
 							});
 							console.log(tweet.text);
 							console.log(tweet.entities.urls[x].expanded_url);
@@ -107,8 +109,6 @@ var pullFromTwitter = function(socket) {
 		}
 	});
 };
-
-pullFromTwitter();
 
 app.get('/', function(req, res) {
   res.render('index.ejs');
