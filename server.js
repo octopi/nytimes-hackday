@@ -21,6 +21,7 @@ var T = new Twit({
 
 var server = require('http').Server(app);
 var io = require('socket.io').listen(server);
+var stream; // dat BIG STREAM
 
 var getNYTimesTrending = function(callback) {
   var nytUrl = 'http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key=c02874f3984ca7bfbd7a35d7e91ba730:16:43844472',
@@ -53,7 +54,7 @@ var pullFromTwitter = function(socket) {
 
   	console.log(facets);
 	  
-	  	var stream = T.stream('statuses/filter', { track: 'instagram com', language: 'en' })
+	  stream = T.stream('statuses/filter', { track: 'instagram com', language: 'en' });
 		stream.on('tweet', function (tweet) {
 			if(tweet.entities.urls.length > 0)
 			{
@@ -82,7 +83,7 @@ var pullFromTwitter = function(socket) {
 				}
 			}
 	  		
-		})
+		});
 
 		var checkFacets = function(str, arr){
 	   		for(var i=0; i < arr.length; i++){
@@ -110,9 +111,18 @@ app.get('/', function(req, res) {
   res.render('index.ejs');
 });
 
-
 io.sockets.on('connection', function (socket) {
-  pullFromTwitter(socket);
+  socket.on('stopStream', function(data) {
+    console.log('stopping stream');
+    stream.stop();
+  });
+
+  socket.on('restartStream', function(data) {
+    if (!stream)
+      pullFromTwitter(socket);
+    else
+      stream.start();
+  });
 });
 
 var port = process.env.PORT || 5000;

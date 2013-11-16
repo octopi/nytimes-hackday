@@ -7,7 +7,7 @@
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
   <style type="text/css">
-  #stream {
+  #main {
     width: 450px;
     margin: 0 auto;
   }
@@ -17,9 +17,21 @@
     socket.on('newTweetSent', function(data) {
       $('#stream').prepend(data.html);
     });
+    $(function() {
+      $('#startStream').click(function() {
+	socket.emit('restartStream', {});
+      });
+      $('#stopStream').click(function() {
+	socket.emit('stopStream', {});
+      });
+    });
   </script>
 </head>
 <body>
-  <div id="stream"></div>
+  <div id="main">
+    <h1><a href="#" id="stopStream">stop</a></h1>
+    <h1><a href="#" id="startStream">start</a></h1>
+    <div id="stream"></div>
+  </div>
 </body>
 </html>
