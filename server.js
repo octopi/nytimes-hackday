@@ -1,12 +1,15 @@
 var express = require('express'),
 ig = require('instagram-node').instagram(),
-async = require('async');
+async = require('async'),
+request = require('request');
 
 var app = express();
 app.use(express.logger());
 app.use(express.bodyParser());
 
-var getNYTimesTrending = function() {};
+var getNYTimesTrending = function() {
+
+};
 var pullFromTwitter = function() {
   console.log('yo');
 };
