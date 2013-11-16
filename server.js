@@ -10,10 +10,10 @@ app.use(express.logger());
 app.use(express.bodyParser());
 
 var T = new Twit({
-    consumer_key:         'mQra7aCPJjI3tzqvP6Icw'
-  , consumer_secret:      'HWbc7P6jEGHQDPSOSeSBn4kJu739nMw4czmkQDueQZY'
-  , access_token:         '20206051-KNUVBKic9XyG5GVBZuVf180hLqsiI1HWUpQcGD4Bb'
-  , access_token_secret:  'AZAmGHoPFZtVvOw5yQ8A6zDD5mGe6NPZnrGFvRzYHBLHx'
+    consumer_key:         'MTZybNXiQNEY6JnRisn3w'
+  , consumer_secret:      '5QhVVzgxaEIaeuuDBijwjCIDCVo5oTHXfNRyu8cKpQ'
+  , access_token:         '2198291923-SHFJvkZSwWLx5phY7JZFjsjpRtN39bWHJqOMuXA'
+  , access_token_secret:  'vlw1xRRlsF00Rpa9frdgXVBGSIIJk7sDBJD1O5i7zU0uY'
 })
 
 var getNYTimesTrending = function(callback) {
@@ -41,24 +41,48 @@ var getNYTimesTrending = function(callback) {
 };
 
 var pullFromTwitter = function() {
-  console.log('yo');
-  var stream = T.stream('statuses/filter', { track: 'instagram com', language: 'en' })
-
-	stream.on('tweet', function (tweet) {
-		if(tweet.entities.urls.length > 0)
-		{
-			for(var x = 0; x < tweet.entities.urls.length; x++)
-			{
-				if(tweet.entities.urls[x].expanded_url.indexOf("instagram.com") !== -1)
-				{
-					console.log(tweet.text)
-					console.log(tweet.entities.urls[x].expanded_url)
-				}
-			}
-			
-		}
-  		
+  console.log('Checking Trending...');
+  T.post('statuses/update', { status: 'Automated tweet - test' }, function(err, reply) {
+  	console.log(err, reply);
 	})
+  getNYTimesTrending(function (facets) {
+
+  	console.log(Object.keys(facets));
+	  
+	  	var stream = T.stream('statuses/filter', { track: 'instagram com', language: 'en' })
+		stream.on('tweet', function (tweet) {
+			if(tweet.entities.urls.length > 0)
+			{
+				for(var x = 0; x < tweet.entities.urls.length; x++)
+				{
+					if(tweet.entities.urls[x].expanded_url.indexOf("instagram.com") !== -1) {
+
+						var checkString = ["RT"];
+						if(checkFacets(tweet.text, Object.keys(facets))) {
+							console.log(tweet.text);
+							console.log(tweet.entities.urls[x].expanded_url);
+							
+						}
+					}
+				}
+				
+			}
+	  		
+		})
+
+		var checkFacets = function(str, arr){
+	   		for(var i=0; i < arr.length; i++){
+	   			var keywords = arr[i].split();
+	   			for(var j = 0; j < keywords.length; j++) {
+	   				if(str.toLowerCase().indexOf(keywords[j].toLowerCase()) !== -1){
+	       				console.log("FOUND A MATCH FOR "+keywords[j]);
+	           			return true;
+	   				}
+	       		}
+	   		}
+	   		return false;
+		}
+	});
 };
 var makeComment = function(instagramUrl) {};
 
