@@ -7,6 +7,8 @@
     "async": "~0.2.9",
     "twit": "1.1.11",
     "request": "~2.27.0",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "socket.io": "~0.9.16",
+    "ejs": "~0.8.4"
   }
 }

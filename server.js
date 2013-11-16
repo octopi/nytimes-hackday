@@ -8,6 +8,9 @@ _ = require('underscore');
 var app = express();
 app.use(express.logger());
 app.use(express.bodyParser());
+ig.use({
+  access_token: '5d4993b79c3e7697063c0dd5905d4c7f8f4c3a6537150f1688512de7e58bf429'
+});
 
 var T = new Twit({
     consumer_key:         'MTZybNXiQNEY6JnRisn3w'
@@ -15,6 +18,9 @@ var T = new Twit({
   , access_token:         '2198291923-SHFJvkZSwWLx5phY7JZFjsjpRtN39bWHJqOMuXA'
   , access_token_secret:  'vlw1xRRlsF00Rpa9frdgXVBGSIIJk7sDBJD1O5i7zU0uY'
 })
+
+var server = require('http').Server(app);
+var io = require('socket.io').listen(server);
 
 var getNYTimesTrending = function(callback) {
   var nytUrl = 'http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key=c02874f3984ca7bfbd7a35d7e91ba730:16:43844472',
@@ -84,15 +90,20 @@ var pullFromTwitter = function() {
 		}
 	});
 };
-var makeComment = function(instagramUrl) {};
-
-pullFromTwitter();
 
 app.get('/', function(req, res) {
+  res.render('index.ejs');
 });
 
 
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+
 var port = process.env.PORT || 5000;
-app.listen(port, function() {
+server.listen(port, function() {
   console.log("Listening on " + port);
 });
