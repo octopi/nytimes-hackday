@@ -9,6 +9,10 @@ app.use(express.bodyParser());
 
 var getNYTimesTrending = function() {
 
+  return {
+    'USA': 'http://nytimes.com/url',
+    'thanksgiving': 'http://nytimes.com/url'
+  };
 };
 var pullFromTwitter = function() {
   console.log('yo');
