@@ -43,7 +43,7 @@ var getNYTimesTrending = function(callback) {
 
   var addToFacets = function(url) {
     return function(facet) {
-      facets[facet] = url;
+      facets[facet.replace(' ', '')] = url;
     };
   };
 };
@@ -69,16 +69,15 @@ var pullFromTwitter = function(socket) {
 							console.log("TWEETING RESPONSE: " + response);
 							T.post('statuses/update', { status: response, in_reply_to_status_id: tweet.id_str}, function(err, reply) {
 								console.log(err, reply);
+                // send tweet to frontend
+                request('https://api.twitter.com/1/statuses/oembed.json?id=' + tweet.id_str, function(err, response, body) {
+                  socket.emit('newTweetSent', {
+                    html: JSON.parse(body).html
+                  });
+                });
 							});
 							console.log(tweet.text);
 							console.log(tweet.entities.urls[x].expanded_url);
-
-	      // send tweet to frontend
-	      request('https://api.twitter.com/1/statuses/oembed.json?id=' + tweet.id_str, function(err, response, body) {
-		socket.emit('newTweetSent', {
-		  html: JSON.parse(body).html
-		});
-	      });
 						}
 					}
 				}
@@ -99,7 +98,7 @@ var pullFromTwitter = function(socket) {
 		           			return response;
 		   				}
 	   				}
-	       		}
+		      }
 	   		}
 	   		return "";
 		}
