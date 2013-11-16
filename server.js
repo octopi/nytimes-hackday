@@ -118,7 +118,18 @@ var pullFromTwitter = function(socket) {
 };
 
 app.get('/', function(req, res) {
-  res.render('index.ejs');
+  T.get('trends/place', {id : '1'}, function(err, reply) {
+  		console.log("TWITTER TRENDS: ");
+  		var trending = [];
+  		for(var x = 0; x < reply[0].trends.length; x++)
+  		{
+  			trending[x] = reply[0].trends[x].name;
+  		}
+  		console.log(trending);
+  		res.render('index.ejs', {t:trending});
+	})
+
+  
 });
 
 io.sockets.on('connection', function (socket) {
