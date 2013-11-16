@@ -69,12 +69,15 @@ var pullFromTwitter = function(socket) {
 							console.log("TWEETING RESPONSE: " + response);
 							T.post('statuses/update', { status: response, in_reply_to_status_id: tweet.id_str}, function(err, reply) {
 								console.log(err, reply);
-                // send tweet to frontend
-                request('https://api.twitter.com/1/statuses/oembed.json?id=' + tweet.id_str, function(err, response, body) {
-                  socket.emit('newTweetSent', {
-                    html: JSON.parse(body).html
-                  });
-                });
+			                // send tweet to frontend
+				                request('https://api.twitter.com/1/statuses/oembed.json?id=' + tweet.id_str, function(err, response, body) {
+				               		request('http://api.instagram.com/oembed?url=' + tweet.entities.urls[x].expanded_url, function(inst_err, inst_response, inst_body) {
+				                  		socket.emit('newTweetSent', {
+				                    	html: JSON.parse(body).html
+				                    	imageurl: JSON.parse(inst_body).url
+				                  	});
+				                });
+
 							});
 							console.log(tweet.text);
 							console.log(tweet.entities.urls[x].expanded_url);
