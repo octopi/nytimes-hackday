@@ -1,0 +1,9 @@
+{
+  "name": "instagrandom",
+  "version": "0.1.0",
+  "dependencies": {
+    "instagram-node": "~0.1.13",
+    "express": "~3.4.0",
+    "async": "~0.2.9"
+  }
+}
