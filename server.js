@@ -46,11 +46,9 @@ var getNYTimesTrending = function(callback) {
   };
 };
 
-var pullFromTwitter = function() {
+var pullFromTwitter = function(socket) {
   console.log('Checking Trending...');
- //  T.post('statuses/update', { status: 'Automated tweet - test' }, function(err, reply) {
- //  	console.log(err, reply);
-	// })
+
   getNYTimesTrending(function (facets) {
 
   	console.log(facets);
@@ -72,7 +70,13 @@ var pullFromTwitter = function() {
 							});
 							console.log(tweet.text);
 							console.log(tweet.entities.urls[x].expanded_url);
-							
+
+	      // send tweet to frontend
+	      request('https://api.twitter.com/1/statuses/oembed.json?id=' + tweet.id_str, function(err, response, body) {
+		socket.emit('newTweetSent', {
+		  html: JSON.parse(body).html
+		});
+	      });
 						}
 					}
 				}
@@ -108,10 +112,7 @@ app.get('/', function(req, res) {
 
 
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
+  pullFromTwitter(socket);
 });
 
 var port = process.env.PORT || 5000;

@@ -4,15 +4,22 @@
   <meta charset="UTF-8">
   <title>stream</title>
   <script src="/socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+  <style type="text/css">
+  #stream {
+    width: 450px;
+    margin: 0 auto;
+  }
+  </style>
   <script>
     var socket = io.connect('http://localhost:5000');
-    socket.on('news', function (data) {
-      console.log(data);
-      socket.emit('my other event', { my: 'data' });
+    socket.on('newTweetSent', function(data) {
+      $('#stream').prepend(data.html);
     });
   </script>
 </head>
 <body>
-
+  <div id="stream"></div>
 </body>
 </html>
