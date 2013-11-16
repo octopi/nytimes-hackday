@@ -66,23 +66,27 @@ var pullFromTwitter = function(socket) {
 						if(response.length > 0) {
 							console.log("RESPONSE ID : " + tweet.id);
 							console.log("TWEETING RESPONSE: " + response);
-							T.post('statuses/update', { status: response }, function(err, reply) {
-                if(!err) {
-                  // send tweet to frontend
-  	                request('https://api.twitter.com/1/statuses/oembed.json?id=' + reply.id_str, function(err, response, body) {
-  	               		request('http://api.instagram.com/oembed?url=' + tweet.entities.urls[x].expanded_url, function(inst_err, inst_response, inst_body) {
-  	                  		socket.emit('newTweetSent', {
-  	                    	html: JSON.parse(body).html,
-  	                    	imageurl: JSON.parse(inst_body).url
-  	                  	});
-  	                });
-                  } else {
-                    console.log(er);
-                  }
-                });
-							});
-							console.log(tweet.text);
-							console.log(tweet.entities.urls[x].expanded_url);
+              console.log('x is ', x, tweet.entities.urls[x]);
+              (function(idx) {
+                  T.post('statuses/update', { status: response }, function(err, reply) {
+                    if(!err) {
+                      // send tweet to frontend
+                      request('https://api.twitter.com/1/statuses/oembed.json?id=' + reply.id_str, function(err, response, body) {
+                        console.log(tweet.entities.urls, idx, tweet.entities.urls[idx]);
+                        request('http://api.instagram.com/oembed?url=' + tweet.entities.urls[idx].expanded_url, function(inst_err, inst_response, inst_body) {
+                          socket.emit('newTweetSent', {
+                            html: JSON.parse(body).html,
+                            imageurl: JSON.parse(inst_body).url
+                          });
+                        });
+                      });
+                    } else {
+                      console.log(err);
+                    }
+                  });
+                  console.log(tweet.text);
+                  console.log(tweet.entities.urls[idx].expanded_url);
+              })(x);
 						}
 					}
 				}
