@@ -6,12 +6,11 @@
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-  <style type="text/css">
-  #main {
-    width: 450px;
-    margin: 0 auto;
-  }
-  </style>
+
+  <link rel="stylesheet" type="text/css" href="/stylesheets/main.css" />
+  <link href="/stylesheets/Flat-UI-master/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="/stylesheets/Flat-UI-master/css/flat-ui.css" rel="stylesheet">
+
   <script>
     var socket = io.connect('http://localhost:5000');
     socket.on('newTweetSent', function(data) {
@@ -29,9 +28,19 @@
 </head>
 <body>
   <div id="main">
-    <h1><a href="#" id="stopStream">stop</a></h1>
-    <h1><a href="#" id="startStream">start</a></h1>
+      <button class="btn btn-hg btn-primary" id="stopStream">stop</button>
+      <button class="btn btn-hg btn-primary" id="startStream">start</button>
     <div id="stream"></div>
   </div>
+
+  <script src="/stylesheets/Flat-UI-master/js/jquery-ui-1.10.3.custom.min.js"></script>
+  <script src="/stylesheets/Flat-UI-master/js/jquery.ui.touch-punch.min.js"></script>
+  <script src="/stylesheets/Flat-UI-master/js/bootstrap.min.js"></script>
+  <script src="/stylesheets/Flat-UI-master/js/bootstrap-select.js"></script>
+  <script src="/stylesheets/Flat-UI-master/js/bootstrap-switch.js"></script>
+  <script src="/stylesheets/Flat-UI-master/js/flatui-checkbox.js"></script>
+  <script src="/stylesheets/Flat-UI-master/js/flatui-radio.js"></script>
+  <script src="/stylesheets/Flat-UI-master/js/jquery.tagsinput.js"></script>
+  <script src="/stylesheets/Flat-UI-master/js/jquery.placeholder.js"></script>
 </body>
 </html>
