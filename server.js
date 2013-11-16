@@ -48,12 +48,12 @@ var getNYTimesTrending = function(callback) {
 
 var pullFromTwitter = function() {
   console.log('Checking Trending...');
-  T.post('statuses/update', { status: 'Automated tweet - test' }, function(err, reply) {
-  	console.log(err, reply);
-	})
+ //  T.post('statuses/update', { status: 'Automated tweet - test' }, function(err, reply) {
+ //  	console.log(err, reply);
+	// })
   getNYTimesTrending(function (facets) {
 
-  	console.log(Object.keys(facets));
+  	console.log(facets);
 	  
 	  	var stream = T.stream('statuses/filter', { track: 'instagram com', language: 'en' })
 		stream.on('tweet', function (tweet) {
@@ -62,34 +62,45 @@ var pullFromTwitter = function() {
 				for(var x = 0; x < tweet.entities.urls.length; x++)
 				{
 					if(tweet.entities.urls[x].expanded_url.indexOf("instagram.com") !== -1) {
-
-						var checkString = ["RT"];
-						if(checkFacets(tweet.text, Object.keys(facets))) {
+						var response = checkFacets(tweet.text, Object.keys(facets));
+						if(response.length > 0) {
+							response = "@" + tweet.user.screen_name + " " + response;
+							console.log("RESPONSE ID : " + tweet.id);
+							console.log("TWEETING RESPONSE: " + response);
+							T.post('statuses/update', { status: response, in_reply_to_status_id: tweet.id_str}, function(err, reply) {
+								console.log(err, reply);
+							});
 							console.log(tweet.text);
 							console.log(tweet.entities.urls[x].expanded_url);
 							
 						}
 					}
 				}
-				
 			}
 	  		
 		})
 
 		var checkFacets = function(str, arr){
 	   		for(var i=0; i < arr.length; i++){
-	   			var keywords = arr[i].split();
+	   			var currentKey = arr[i];
+	   			var keywords = currentKey.split(" ");
 	   			for(var j = 0; j < keywords.length; j++) {
-	   				if(str.toLowerCase().indexOf(keywords[j].toLowerCase()) !== -1){
-	       				console.log("FOUND A MATCH FOR "+keywords[j]);
-	           			return true;
+	   				if(keywords[j].length > 3){
+	   					var currKeyword = keywords[j]+" ";
+		   				if(str.toLowerCase().indexOf(currKeyword.toLowerCase()) !== -1){
+		       				var response = "Check out this trending nytimes article on " + currentKey + " #educateyoself";
+		       				response = response + " " + facets[currentKey];
+		           			return response;
+		   				}
 	   				}
 	       		}
 	   		}
-	   		return false;
+	   		return "";
 		}
 	});
 };
+
+pullFromTwitter();
 
 app.get('/', function(req, res) {
   res.render('index.ejs');
