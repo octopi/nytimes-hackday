@@ -1,7 +1,8 @@
 var express = require('express'),
 ig = require('instagram-node').instagram(),
-async = require('async');
-var Twit = require('twit')
+async = require('async'),
+Twit = require('twit'),
+request = require('request');
 
 var app = express();
 app.use(express.logger());
@@ -14,7 +15,14 @@ var T = new Twit({
   , access_token_secret:  'AZAmGHoPFZtVvOw5yQ8A6zDD5mGe6NPZnrGFvRzYHBLHx'
 })
 
-var getNYTimesTrending = function() {};
+var getNYTimesTrending = function() {
+
+  return {
+    'USA': 'http://nytimes.com/url',
+    'thanksgiving': 'http://nytimes.com/url'
+  };
+};
+
 var pullFromTwitter = function() {
   console.log('yo');
   var stream = T.stream('statuses/filter', { track: 'instagram com', language: 'en' })
