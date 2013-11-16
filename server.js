@@ -16,7 +16,7 @@ var T = new Twit({
   , access_token_secret:  'AZAmGHoPFZtVvOw5yQ8A6zDD5mGe6NPZnrGFvRzYHBLHx'
 })
 
-var getNYTimesTrending = function() {
+var getNYTimesTrending = function(callback) {
   var nytUrl = 'http://api.nytimes.com/svc/mostpopular/v2/mostshared/all-sections/1.json?api-key=c02874f3984ca7bfbd7a35d7e91ba730:16:43844472',
   facets = {};
   request(nytUrl, function(err, response, body) {
@@ -29,7 +29,7 @@ var getNYTimesTrending = function() {
         _.each(currArticle.per_facet, addToFacets(currArticle.url));
         _.each(currArticle.geo_facet, addToFacets(currArticle.url));
       }
-      return facets;
+      callback(facets);
     }
   });
 
