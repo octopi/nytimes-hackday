@@ -20,6 +20,7 @@
     $(function() {
       $('#startStream').click(function() {
         socket.emit('restartStream', {});
+        $(this).addClass('disabled');
       });
     });
   </script>
