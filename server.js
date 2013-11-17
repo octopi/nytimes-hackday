@@ -68,8 +68,9 @@ var pullFromTwitter = function(socket) {
 							console.log("RESPONSE ID : " + tweet.id);
 							console.log("TWEETING RESPONSE: " + response);
               console.log('x is ', x, tweet.entities.urls[x]);
+              response = '@' + tweet.user.screen_name + ' ' + response;
               (function(idx) {
-                  T.post('statuses/update', { status: response }, function(err, reply) {
+                  T.post('statuses/update', { status: response, in_reply_to_status_id: tweet.id_str }, function(err, reply) {
                     if(!err) {
                       // send tweet to frontend
                       request('https://api.twitter.com/1/statuses/oembed.json?id=' + reply.id_str, function(err, response, body) {
@@ -81,6 +82,7 @@ var pullFromTwitter = function(socket) {
                               html: JSON.parse(body).html,
                               instagram: inst
                             });
+                            stream.stop();
                           }
                         });
                       });
@@ -106,7 +108,7 @@ var pullFromTwitter = function(socket) {
 	   				if(keywords[j].length > 3){
 	   					var currKeyword = keywords[j]+" ";
 		   				if(str.toLowerCase().indexOf('#' + currKeyword.toLowerCase()) !== -1){
-		       				var response = "Check out this trending nytimes article on " + currentKey + " #educateyoself";
+		       				var response = "Hey youth! Do you like " + currentKey + "? Read this article in the #nytimes about it! #educateyoself";
 		       				response = response + " " + facets[currentKey];
 		           			return response;
 		   				}
@@ -129,13 +131,14 @@ app.get('/', function(req, res) {
  //  		console.log(trending);
  //  		res.render('index.ejs', {t:trending});
 	// });
-   T.get('statuses/user_timeline', {screen_name: 'timesteens', count : '10'}, function(err, reply) {
+   T.get('statuses/user_timeline', {screen_name: 'timesteens', count : 10}, function(err, reply) {
   	console.log("MOST RECENT TWEETS: ")
   	var results = [];
   	console.log(reply);
   	var initialData = [];
-  	async.each(reply, function (item, callback){
+  	async.eachSeries(reply, function (item, callback) {
   		if(item.in_reply_to_status_id_str) {
+        console.log('HERHEHRERERERE');
   			async.parallel({
   				twitter: function(cb) {
   					request('https://api.twitter.com/1/statuses/oembed.json?id=' + item.id_str, function(err, response, body) {
