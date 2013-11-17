@@ -53,6 +53,7 @@ var pullFromTwitter = function(socket) {
 
   getNYTimesTrending(function (facets) {
 
+
   	console.log(facets);
 	  
 	  stream = T.stream('statuses/filter', { track: 'instagram com', language: 'en' });
@@ -118,15 +119,55 @@ var pullFromTwitter = function(socket) {
 };
 
 app.get('/', function(req, res) {
-  T.get('trends/place', {id : '2459115'}, function(err, reply) {
-  		console.log("TWITTER TRENDS: ");
-  		var trending = [];
-  		for(var x = 0; x < reply[0].trends.length; x++)
-  		{
-  			trending[x] = reply[0].trends[x].name;
+ //  T.get('trends/place', {id : '2459115'}, function(err, reply) {
+ //  		console.log("TWITTER TRENDS: ", reply, err);
+ //  		var trending = [];
+ //  		for(var x = 0; x < reply[0].trends.length; x++)
+ //  		{
+ //  			trending[x] = reply[0].trends[x].name;
+ //  		}
+ //  		console.log(trending);
+ //  		res.render('index.ejs', {t:trending});
+	// });
+   T.get('statuses/user_timeline', {screen_name: 'timesteens', count : '10'}, function(err, reply) {
+  	console.log("MOST RECENT TWEETS: ")
+  	var results = [];
+  	console.log(reply);
+  	var new_object;
+  	async.each(reply, function (item, callback){
+  		if(item.in_reply_to_status_id_str) {
+  			async.parallel({
+  				twitter: function(cb) {
+  					request('https://api.twitter.com/1/statuses/oembed.json?id=' + item.id_str, function(err, response, body) {
+  						cb(null, JSON.parse(body).html);
+  					});
+  				},
+  				inst: function(cb) {
+  					T.get('statuses/show/:id' , {id: item.in_reply_to_status_id_str}, function(err, reply) {
+  						for(var idx = 0; idx < reply.entities.urls.length; idx++) {
+  							if(reply.entities.urls[idx].expanded_url.indexOf('instagram.com') != -1) {
+  								request('http://api.instagram.com/oembed?url=' + reply.entities.urls[idx].expanded_url, function(inst_err, inst_response, inst_body) {
+  									cb(null, JSON.parse(inst_body));
+  								});
+  							}
+  						}
+  					})
+  				}
+  				},
+  				function(err, results) {
+  					console.log('HERE', results);
+  					new_object = results;
+  					callback();
+  				}
+  			);
+  		} else {
+  			callback();
   		}
-  		console.log(trending);
-  		res.render('index.ejs', {t:trending});
+
+  	}, function (err) {
+  		console.log('obj', new_object);
+  		res.render('index.ejs', {data: new_object});
+  	});
 	});
 });
 
