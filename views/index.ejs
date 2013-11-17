@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
-  <title>stream</title>
+  <title>Times for Teens</title>
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -17,7 +17,7 @@
 <body>
 
   <div id="main">
-    <h1>Times for Teens</h1>
+    <h1><img id="logo" src="/times.png" /> for Teens</h1>
     <% for(var i = 0; i < data.length; i++) { %>
       <div class="is">
         <img src="<%= data[i].inst.url %>" class="is-img" />

@@ -174,7 +174,7 @@ app.get('/', function(req, res) {
 	});
 });
 
-app.get('/educate', function(req, res) {
+app.get('/drop', function(req, res) {
   res.render('educate.ejs');
 });
 

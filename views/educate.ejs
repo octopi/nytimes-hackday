@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
   <meta charset="UTF-8">
-  <title>stream</title>
+  <title>Times for Teens (Teacher Portal)</title>
   <script src="/socket.io/socket.io.js"></script>
   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
@@ -16,18 +16,21 @@
     socket.on('newTweetSent', function(data) {
       $('#stream').prepend(data.html);
       $('#stream').prepend('<div class="is"><img class="is-img" src="' + data.instagram.url + '" /><p class="is-title">' + data.instagram.title + '</p></div>');
+      $('#startStream').removeClass('disabled');
+      $('#startStream').css('background', '#1abc9c');
     });
     $(function() {
       $('#startStream').click(function() {
         socket.emit('restartStream', {});
-        $(this).addClass('disabled');
+        $('#startStream').addClass('disabled');
+        $('#startStream').css('background', '#bdc3c7');
       });
     });
   </script>
 </head>
 <body>
   <div id="main">
-    <h1>Times for Teens</h1>
+    <h1><img id="logo" src="/times.png" /> for Teens</h1>
       <button class="btn btn-hg btn-primary" id="startStream">Drop Some #Knowledge</button>
     <div id="stream"></div>
   </div>

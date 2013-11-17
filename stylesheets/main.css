@@ -21,3 +21,14 @@
 #trending li {
   list-style-type: none;
 }
+
+#startStream {
+  display: block;
+  margin: 0 auto;
+  width: 300px;
+}
+
+#logo {
+  width: 180px;
+  vertical-align: top;
+}
