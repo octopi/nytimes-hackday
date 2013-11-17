@@ -14,10 +14,10 @@ ig.use({
 });
 
 var T = new Twit({
-    consumer_key:         'MTZybNXiQNEY6JnRisn3w'
-  , consumer_secret:      '5QhVVzgxaEIaeuuDBijwjCIDCVo5oTHXfNRyu8cKpQ'
-  , access_token:         '2198291923-SHFJvkZSwWLx5phY7JZFjsjpRtN39bWHJqOMuXA'
-  , access_token_secret:  'vlw1xRRlsF00Rpa9frdgXVBGSIIJk7sDBJD1O5i7zU0uY'
+    consumer_key:         'OpzEUMolXAXIEmqpqQ'
+  , consumer_secret:      'fm0FGPoAW1XKNilMWkZHDUbHTOzOoTGJaZVfNHffkk4'
+  , access_token:         '2198620699-91Gs5gqwwdQnHsgEeVtgDynZwiw5F7sYxEtcwmN'
+  , access_token_secret:  'ppSSrc17YHmgdgzdkfANIsNaMlCJUFDhnARj3UYG9OjeQ'
 })
 
 var server = require('http').Server(app);
