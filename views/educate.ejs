@@ -21,16 +21,13 @@
       $('#startStream').click(function() {
         socket.emit('restartStream', {});
       });
-      $('#stopStream').click(function() {
-        socket.emit('stopStream', {});
-      });
     });
   </script>
 </head>
 <body>
   <div id="main">
-      <button class="btn btn-hg btn-primary" id="stopStream">stop</button>
-      <button class="btn btn-hg btn-primary" id="startStream">start</button>
+    <h1>Times for Teens</h1>
+      <button class="btn btn-hg btn-primary" id="startStream">Drop Some #Knowledge</button>
     <div id="stream"></div>
   </div>
 
