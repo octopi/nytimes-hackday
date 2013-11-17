@@ -133,7 +133,7 @@ app.get('/', function(req, res) {
   	console.log("MOST RECENT TWEETS: ")
   	var results = [];
   	console.log(reply);
-  	var new_object;
+  	var initialData = [];
   	async.each(reply, function (item, callback){
   		if(item.in_reply_to_status_id_str) {
   			async.parallel({
@@ -156,7 +156,7 @@ app.get('/', function(req, res) {
   				},
   				function(err, results) {
   					console.log('HERE', results);
-  					new_object = results;
+  					initialData.push(results);
   					callback();
   				}
   			);
@@ -165,8 +165,8 @@ app.get('/', function(req, res) {
   		}
 
   	}, function (err) {
-  		console.log('obj', new_object);
-  		res.render('index.ejs', {data: new_object});
+  		console.log('initialData', initialData);
+  		res.render('index.ejs', {data: initialData});
   	});
 	});
 });

@@ -15,7 +15,7 @@
     var socket = io.connect('http://localhost:5000');
     socket.on('newTweetSent', function(data) {
       $('#stream').prepend(data.html);
-      $('#stream').prepend('<div class="is"><img class="is-img" src="' + data.instagram.url + '" /><p class="is-title">' + data.instagram.title + '</a></div>');
+      $('#stream').prepend('<div class="is"><img class="is-img" src="' + data.instagram.url + '" /><p class="is-title">' + data.instagram.title + '</p></div>');
     });
     $(function() {
       $('#startStream').click(function() {
