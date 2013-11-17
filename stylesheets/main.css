@@ -12,3 +12,12 @@
 .is-title {
   font-size: 13px;
 }
+
+#trending {
+  position: absolute;
+  top: 150px;
+}
+
+#trending li {
+  list-style-type: none;
+}

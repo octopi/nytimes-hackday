@@ -12,9 +12,27 @@
   <link href="/stylesheets/Flat-UI-master/css/flat-ui.css" rel="stylesheet">
 
   <script>
+    var socket = io.connect('http://localhost:5000');
+    socket.on('newTweetSent', function(data) {
+      $('#stream').prepend(data.html);
+      $('#stream').prepend('<div class="is"><img class="is-img" src="' + data.instagram.url + '" /><p class="is-title">' + data.instagram.title + '</a></div>');
+    });
+    $(function() {
+      $('#startStream').click(function() {
+        socket.emit('restartStream', {});
+      });
+      $('#stopStream').click(function() {
+        socket.emit('stopStream', {});
+      });
+    });
   </script>
 </head>
 <body>
+  <div id="main">
+      <button class="btn btn-hg btn-primary" id="stopStream">stop</button>
+      <button class="btn btn-hg btn-primary" id="startStream">start</button>
+    <div id="stream"></div>
+  </div>
 
   <ul id="trending">
     <% for(var i = 0; i < t.length; i++) { %>

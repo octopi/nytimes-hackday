@@ -118,7 +118,7 @@ var pullFromTwitter = function(socket) {
 };
 
 app.get('/', function(req, res) {
-  T.get('trends/place', {id : '1'}, function(err, reply) {
+  T.get('trends/place', {id : '2459115'}, function(err, reply) {
   		console.log("TWITTER TRENDS: ");
   		var trending = [];
   		for(var x = 0; x < reply[0].trends.length; x++)
@@ -127,9 +127,11 @@ app.get('/', function(req, res) {
   		}
   		console.log(trending);
   		res.render('index.ejs', {t:trending});
-	})
+	});
+});
 
-  
+app.get('/educate', function(req, res) {
+  res.render('educate.ejs');
 });
 
 io.sockets.on('connection', function (socket) {
